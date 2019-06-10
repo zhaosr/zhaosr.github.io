@@ -18,17 +18,17 @@ var _hmt = _hmt || [];
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>zhaosr_blog</title>
+  <title>byron.zhao</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta property="og:type" content="website">
-<meta property="og:title" content="zhaosr_blog">
+<meta property="og:title" content="byron.zhao">
 <meta property="og:url" content="http://yoursite.com/index.html">
-<meta property="og:site_name" content="zhaosr_blog">
+<meta property="og:site_name" content="byron.zhao">
 <meta property="og:locale" content="default">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="zhaosr_blog">
+<meta name="twitter:title" content="byron.zhao">
   
-    <link rel="alternative" href="/atom.xml" title="zhaosr_blog" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="byron.zhao" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -217,12 +217,12 @@ var _hmt = _hmt || [];
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#sonarqube服务器配置</span></span><br><span class="line">[root@sonarqube opt]<span class="comment"># cat /opt/sonarqube-6.7.6/conf/sonar.properties | grep -v "#" | grep -v "^$"</span></span><br><span class="line">sonar.jdbc.username=sonar</span><br><span class="line">sonar.jdbc.password=xxxxxxx</span><br><span class="line">sonar.jdbc.url=jdbc:mysql://localhost:3306/sonar?useUnicode=<span class="literal">true</span>&amp;characterEncoding=utf8&amp;rewriteBatchedStatements=<span class="literal">true</span>&amp;useConfigs=maxPerformance&amp;useSSL=<span class="literal">false</span></span><br><span class="line">sonar.jdbc.maxActive=60</span><br><span class="line">sonar.jdbc.maxIdle=5</span><br><span class="line">sonar.jdbc.minIdle=2</span><br><span class="line">sonar.jdbc.maxWait=5000</span><br><span class="line">sonar.jdbc.minEvictableIdleTimeMillis=600000</span><br><span class="line">sonar.jdbc.timeBetweenEvictionRunsMillis=30000</span><br><span class="line">sonar.web.javaOpts=-Xmx3072m -Xms3072m -XX:+HeapDumpOnOutOfMemoryError</span><br><span class="line">sonar.web.host=0.0.0.0</span><br><span class="line">sonar.web.port=9000</span><br><span class="line"><span class="comment">#jenkins scanner的配置</span></span><br><span class="line">root@jenkins:/usr/<span class="built_in">local</span>/sonar-scanner/conf<span class="comment"># cat sonar-scanner.properties | grep -v "^$" | grep -v "#"</span></span><br><span class="line">sonar.host.url=http://sonar地址:9000</span><br></pre></td></tr></table></figure>
 
 <p>jenkins集成</p>
-<h3 id="1-sonarqube服务启动后，打开页面，获取token"><a href="#1-sonarqube服务启动后，打开页面，获取token" class="headerlink" title="1 sonarqube服务启动后，打开页面，获取token"></a>1 sonarqube服务启动后，打开页面，获取token</h3><p><img src="/assets/1.png" alt="1"></p>
-<h3 id="2-在“系统管理”–“系统设置”找到SonarQube-servers，配置地址，在“Server-authentication-token”配置token，然后保存"><a href="#2-在“系统管理”–“系统设置”找到SonarQube-servers，配置地址，在“Server-authentication-token”配置token，然后保存" class="headerlink" title="2 在“系统管理”–“系统设置”找到SonarQube servers，配置地址，在“Server authentication token”配置token，然后保存"></a>2 在“系统管理”–“系统设置”找到SonarQube servers，配置地址，在“Server authentication token”配置token，然后保存</h3><p><img src="/assets/2.png" alt="2"></p>
-<h3 id="3-在“系统管理”–“全局工具配置”–“SonarQube-Scanner”"><a href="#3-在“系统管理”–“全局工具配置”–“SonarQube-Scanner”" class="headerlink" title="3 在“系统管理”–“全局工具配置”–“SonarQube Scanner”"></a>3 在“系统管理”–“全局工具配置”–“SonarQube Scanner”</h3><p><img src="/assets/3.png" alt="3"></p>
-<h3 id="4-对应项目构建的配置中，配置如下："><a href="#4-对应项目构建的配置中，配置如下：" class="headerlink" title="4 对应项目构建的配置中，配置如下："></a>4 对应项目构建的配置中，配置如下：</h3><p><img src="/assets/4.png" alt="4"></p>
-<h3 id="5-构建成功后会在当前构建项目页面生成报告"><a href="#5-构建成功后会在当前构建项目页面生成报告" class="headerlink" title="5 构建成功后会在当前构建项目页面生成报告"></a>5 构建成功后会在当前构建项目页面生成报告</h3><p><img src="/assets/5.png" alt="5"></p>
-<h3 id="6单击进入可查看代码分析报告"><a href="#6单击进入可查看代码分析报告" class="headerlink" title="6单击进入可查看代码分析报告"></a>6单击进入可查看代码分析报告</h3><p><img src="/assets/6.png" alt="6"><img src="/assets/7.png" alt="7"></p>
+<h3 id="1-sonarqube服务启动后，打开页面，获取token"><a href="#1-sonarqube服务启动后，打开页面，获取token" class="headerlink" title="1 sonarqube服务启动后，打开页面，获取token"></a>1 sonarqube服务启动后，打开页面，获取token</h3><p><img src="SonarQube/1.png" alt="1"></p>
+<h3 id="2-在“系统管理”–“系统设置”找到SonarQube-servers，配置地址，在“Server-authentication-token”配置token，然后保存"><a href="#2-在“系统管理”–“系统设置”找到SonarQube-servers，配置地址，在“Server-authentication-token”配置token，然后保存" class="headerlink" title="2 在“系统管理”–“系统设置”找到SonarQube servers，配置地址，在“Server authentication token”配置token，然后保存"></a>2 在“系统管理”–“系统设置”找到SonarQube servers，配置地址，在“Server authentication token”配置token，然后保存</h3><p><img src="SonarQube/2.png" alt="2"></p>
+<h3 id="3-在“系统管理”–“全局工具配置”–“SonarQube-Scanner”"><a href="#3-在“系统管理”–“全局工具配置”–“SonarQube-Scanner”" class="headerlink" title="3 在“系统管理”–“全局工具配置”–“SonarQube Scanner”"></a>3 在“系统管理”–“全局工具配置”–“SonarQube Scanner”</h3><p><img src="SonarQube/3.png" alt="3"></p>
+<h3 id="4-对应项目构建的配置中，配置如下："><a href="#4-对应项目构建的配置中，配置如下：" class="headerlink" title="4 对应项目构建的配置中，配置如下："></a>4 对应项目构建的配置中，配置如下：</h3><p><img src="SonarQube/4.png" alt="4"></p>
+<h3 id="5-构建成功后会在当前构建项目页面生成报告"><a href="#5-构建成功后会在当前构建项目页面生成报告" class="headerlink" title="5 构建成功后会在当前构建项目页面生成报告"></a>5 构建成功后会在当前构建项目页面生成报告</h3><p><img src="SonarQube/5.png" alt="5"></p>
+<h3 id="6单击进入可查看代码分析报告"><a href="#6单击进入可查看代码分析报告" class="headerlink" title="6单击进入可查看代码分析报告"></a>6单击进入可查看代码分析报告</h3><p><img src="SonarQube/6.png" alt="6"><img src="SonarQube/7.png" alt="7"></p>
 
       
 
