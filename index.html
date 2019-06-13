@@ -188,19 +188,22 @@ var _hmt = _hmt || [];
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>#漏洞概述<br>近日，Confluence官方发布了SSRF漏洞（CVE-2019-3395）及远程代码执行漏洞（CVE-2019-3396）的安全通告，攻击者利用漏洞可实现远程代码执行、服务器端请求伪造。此次通告的漏洞分别存在于WebDAV、及Widget连接器中。<br>CVE-2019-3395 WebDAV<br>2018年6月18日前发布的Confluence Server及Data Center均受此漏洞影响。此漏洞存在于WebDAV插件中，攻击者可远程利用此漏洞使Confluence服务器或Data Center发送任意HTTP或WebDAV请求，实现服务器端请求伪造（SSRF）。<br>官方已针对此漏洞发布6.8.5、6.9.3修复版本。<br>CVE-2019-3396 Widget Connector<br>该漏洞为server-side template injection服务器端模板注入漏洞，存在于Confluence Server及Data Center的Widget Connector插件中。攻击者成功利用此漏洞可实现目录穿越及远程代码执行。<br>官方已针对此漏洞发布6.12.3、6.13.3、6.14.2修复版本。<br>目前PoC已经公开，漏洞利用成功的截图如下：</p>
+        <h1 id="漏洞概述"><a href="#漏洞概述" class="headerlink" title="漏洞概述"></a>漏洞概述</h1><p>近日，Confluence官方发布了SSRF漏洞（CVE-2019-3395）及远程代码执行漏洞（CVE-2019-3396）的安全通告，攻击者利用漏洞可实现远程代码执行、服务器端请求伪造。此次通告的漏洞分别存在于WebDAV、及Widget连接器中。<br>CVE-2019-3395 WebDAV<br>2018年6月18日前发布的Confluence Server及Data Center均受此漏洞影响。此漏洞存在于WebDAV插件中，攻击者可远程利用此漏洞使Confluence服务器或Data Center发送任意HTTP或WebDAV请求，实现服务器端请求伪造（SSRF）。<br>官方已针对此漏洞发布6.8.5、6.9.3修复版本。<br>CVE-2019-3396 Widget Connector<br>该漏洞为server-side template injection服务器端模板注入漏洞，存在于Confluence Server及Data Center的Widget Connector插件中。攻击者成功利用此漏洞可实现目录穿越及远程代码执行。<br>官方已针对此漏洞发布6.12.3、6.13.3、6.14.2修复版本。<br>目前PoC已经公开，漏洞利用成功的截图如下：</p>
 <p>参考链接：<br><a href="https://confluence.atlassian.com/doc/confluence-security-advisory-2019-03-20-966660264.html" target="_blank" rel="noopener">https://confluence.atlassian.com/doc/confluence-security-advisory-2019-03-20-966660264.html</a></p>
-<p>##影响范围<br>受影响版本</p>
+<h2 id="影响范围"><a href="#影响范围" class="headerlink" title="影响范围"></a>影响范围</h2><p>受影响版本</p>
 <blockquote>
 <p>Confluence 1.<em>.</em>、<em>.</em>、3.<em>.</em>、4.<em>.</em>、5.<em>.</em><br>Confluence 6.0.<em>、1.</em>、6.2.<em>、6.3.</em>、6.4.<em>、6.5.</em><br>Confluence 6.6.* &lt; 6.6.12<br>Confluence 6.7.<em>、8.</em>、6.9.<em>、6.10.</em>、6.11.*
 Confluence 6.12.* &lt; 6.12.3<br>Confluence 6.13.* &lt; 6.13.3<br>Confluence 6.14.* &lt; 6.14.2<br>不受影响版本<br>Confluence &gt;= 6.6.12<br>Confluence &gt;= 6.12.3<br>Confluence &gt;= 6.13.3<br>Confluence &gt;= 6.14.2<br>Confluence 15.1<br>Confluence官方指出Confluence Cloud不受此次通告漏洞影响。</p>
 </blockquote>
-<p>##影响排查<br>用户可通过查看当前Confluence版本是否在受影响范围内，对当前服务是否受此漏洞影响进行排查。点击 ，选择“关于Confluence”，即可对当前版本进行查看。</p>
-<p>##修复建议<br>官方升级<br>官方建议用户升级至最新版本6.15.1，以保证服务的安全性及稳定性。下载链接如下:<br><a href="https://www.atlassian.com/software/confluence/download/" target="_blank" rel="noopener">https://www.atlassian.com/software/confluence/download/</a><br><a href="https://atlassian.com/software/confluence/download/data-center" target="_blank" rel="noopener">https://atlassian.com/software/confluence/download/data-center</a><br>若无法升级至最新版本，可参考下表，升级至对应修复版本：<br>当前版本 修复版本<br>6.12.0, 6.12.1, 6.12.2 6.12.3<br>6.14.0, 6.14.1 6.14.2<br>6.6.0, 6.6.1, 6.6.2, 6.6.3, 6.6.4, 6.6.5, 6.6.6, 6.6.7, 6.6.8, 6.6.9, 6.6.10, 6.6.11 6.6.12<br>6.13.0, 6.13.1, 6.13.2 6.13.3<br>其他早期版本 可升级至6.14.2、6.13.3、6.6.12任一版本。<br>升级widgetconnector插件至修复版本<br>用户可通过替换widgetconnector-<em>.jar文件至修复版widgetconnector-3.1.4，以实现对漏洞CVE-2019-3396的修复。具体操作步骤如下：<br>找到插件widgetconnector-</em>.jar文件所在位置，linux系统下可通过下列命令查找：</p>
+<h2 id="影响排查"><a href="#影响排查" class="headerlink" title="影响排查"></a>影响排查</h2><p>用户可通过查看当前Confluence版本是否在受影响范围内，对当前服务是否受此漏洞影响进行排查。点击 ，选择“关于Confluence”，即可对当前版本进行查看。</p>
+<h2 id="修复建议"><a href="#修复建议" class="headerlink" title="修复建议"></a>修复建议</h2><h3 id="官方建议用户升级至最新版本6-15-1，以保证服务的安全性及稳定性。下载链接如下"><a href="#官方建议用户升级至最新版本6-15-1，以保证服务的安全性及稳定性。下载链接如下" class="headerlink" title="官方建议用户升级至最新版本6.15.1，以保证服务的安全性及稳定性。下载链接如下:"></a>官方建议用户升级至最新版本6.15.1，以保证服务的安全性及稳定性。下载链接如下:</h3><p><a href="https://www.atlassian.com/software/confluence/download/" target="_blank" rel="noopener">https://www.atlassian.com/software/confluence/download/</a><br><a href="https://atlassian.com/software/confluence/download/data-center" target="_blank" rel="noopener">https://atlassian.com/software/confluence/download/data-center</a></p>
+<h3 id="若无法升级至最新版本，可参考下表，升级至对应修复版本："><a href="#若无法升级至最新版本，可参考下表，升级至对应修复版本：" class="headerlink" title="若无法升级至最新版本，可参考下表，升级至对应修复版本："></a>若无法升级至最新版本，可参考下表，升级至对应修复版本：</h3><p>当前版本 修复版本<br>6.12.0, 6.12.1, 6.12.2 6.12.3<br>6.14.0, 6.14.1 6.14.2<br>6.6.0, 6.6.1, 6.6.2, 6.6.3, 6.6.4, 6.6.5, 6.6.6, 6.6.7, 6.6.8, 6.6.9, 6.6.10, 6.6.11 6.6.12<br>6.13.0, 6.13.1, 6.13.2 6.13.3<br>其他早期版本 可升级至6.14.2、6.13.3、6.6.12任一版本。</p>
+<h3 id="升级widgetconnector插件至修复版本"><a href="#升级widgetconnector插件至修复版本" class="headerlink" title="升级widgetconnector插件至修复版本"></a>升级widgetconnector插件至修复版本</h3><p>用户可通过替换widgetconnector-<em>.jar文件至修复版widgetconnector-3.1.4，以实现对漏洞CVE-2019-3396的修复。具体操作步骤如下：<br>找到插件widgetconnector-</em>.jar文件所在位置，linux系统下可通过下列命令查找：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -name “widgetconnector-*”</span><br></pre></td></tr></table></figure>
 
-<p>将当前widgetconnector-*.jar文件替换为安全版本，下载链接如下：<br><a href="https://packages.atlassian.com/maven-public/com/atlassian/confluence/extra/widgetconnector/widgetconnector/3.1.4/widgetconnector-3.1.4.jar" target="_blank" rel="noopener">https://packages.atlassian.com/maven-public/com/atlassian/confluence/extra/widgetconnector/widgetconnector/3.1.4/widgetconnector-3.1.4.jar</a><br>重启服务，即可完成修复。<br>禁用不安全插件<br>若暂时不方便升级至修复版本，也可点击“设置” -&gt;Manage apps/add-ons选择System，将下列Confluence插件禁用。<br>WebDAV plugin<br>Widget Connector</p>
-<p>注：<br>若禁用Widget Connector插件， Widget Connector 指令将不可用，该指令是用于展示YouTube、Vimeo及推特网站内容的，禁用该指令后，用户可能会遇到‘unknown macro’错误。<br>若禁用WebDAV插件，将无法使用WebDAV客户端连接至Confluence。禁用此插件也将自动禁用Office Connector插件。<br>在完成升级后，需手动启用下列插件：<br>WebDAV plugin<br>Widget Connector<br>Office Connector.<br><strong>声明</strong><br>本文摘自<img src="http://www.nsfocus.com.cn/content/details_141_2939.html" alt="绿盟科技"></p>
+<p>将当前widgetconnector-*.jar文件替换为安全版本，下载链接如下：<br><a href="https://packages.atlassian.com/maven-public/com/atlassian/confluence/extra/widgetconnector/widgetconnector/3.1.4/widgetconnector-3.1.4.jar" target="_blank" rel="noopener">https://packages.atlassian.com/maven-public/com/atlassian/confluence/extra/widgetconnector/widgetconnector/3.1.4/widgetconnector-3.1.4.jar</a><br>重启服务，即可完成修复。</p>
+<h3 id="禁用不安全插件"><a href="#禁用不安全插件" class="headerlink" title="禁用不安全插件"></a>禁用不安全插件</h3><p>若暂时不方便升级至修复版本，也可点击“设置” -&gt;Manage apps/add-ons选择System，将下列Confluence插件禁用。<br>WebDAV plugin<br>Widget Connector</p>
+<p>注：<br>若禁用Widget Connector插件， Widget Connector 指令将不可用，该指令是用于展示YouTube、Vimeo及推特网站内容的，禁用该指令后，用户可能会遇到‘unknown macro’错误。<br>若禁用WebDAV插件，将无法使用WebDAV客户端连接至Confluence。禁用此插件也将自动禁用Office Connector插件。<br>在完成升级后，需手动启用下列插件：<br>WebDAV plugin<br>Widget Connector<br>Office Connector.<br><strong>声明</strong><br>本文摘自<a href="http://www.nsfocus.com.cn/content/details_141_2939.html" target="_blank" rel="noopener">绿盟科技</a></p>
 
       
 
@@ -625,7 +628,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">工具使用</a>
+                <a href="javascript:void(0)" class="js-tag color4">confluence 安全</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -633,11 +636,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随记</a>
+                <a href="javascript:void(0)" class="js-tag color5">工具使用</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">confluence 安全</a>
+                <a href="javascript:void(0)" class="js-tag color3">随记</a>
               </li>
             
             <div class="clearfix"></div>
