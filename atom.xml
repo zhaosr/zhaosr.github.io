@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>byron.zhao</title>
+  
+  <subtitle>生活不止眼前的苟且，还有读不懂的诗和到不了的远方</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://yoursite.com/"/>
+  <updated>2019-06-11T06:04:53.920Z</updated>
+  <id>http://yoursite.com/</id>
+  
+  <author>
+    <name>Byron</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>SonarQube与Jenkins集成对代码质量分析</title>
+    <link href="http://yoursite.com/2019/06/10/SonarQube%E4%B8%8EJenkins%E9%9B%86%E6%88%90%E5%AF%B9%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F%E5%88%86%E6%9E%90/"/>
+    <id>http://yoursite.com/2019/06/10/SonarQube与Jenkins集成对代码质量分析/</id>
+    <published>2019-06-10T08:52:27.000Z</published>
+    <updated>2019-06-11T06:04:53.920Z</updated>
+    
+    <content type="html"><![CDATA[<p>SonarQube 是一个开源的代码质量分析平台，便于管理代码的质量，可检查出项目代码的漏洞和潜在的逻辑问题。</p><p>同时，它提供了丰富的插件，支持多种语言的检测， 如 Java、Python、Groovy、C、C++等几十种编程语言的检测。</p><p>它主要的核心价值体现在如下几个方面：</p><ul><li>检查代码是否遵循编程标准：如命名规范，编写的规范等。</li><li>检查设计存在的潜在缺陷：SonarQube 通过插件Findbugs、Checkstyle 等工具检测代码存在的缺陷。</li><li>检测代码的重复代码量：SonarQube 可以展示项目中存在大量复制粘贴的代码。</li><li>检测代码中注释的程度：源码注释过多或者太少都不好，影响程序的可读可理解性。</li><li>检测代码中包、类之间的关系：分析类之间的关系是否合理，复杂度情况。</li></ul><p>SonarQube平台是由4个部分组成:</p><ul><li>SonarQube Server</li><li>SonarQube Database</li><li>SonarQube Plugins</li><li>SonarQube Scanner</li></ul><p>官网地址官网地址：<a href="https://www.sonarqube.org" target="_blank" rel="noopener">https://www.sonarqube.org</a><br>官方文档：<a href="https://docs.sonarqube.org/latest/architecture/architecture-integration/" target="_blank" rel="noopener">https://docs.sonarqube.org/latest/architecture/architecture-integration/</a></p><p>根据官网内容列出的基础配置需求（硬件资源根据实际情况可以调整）：</p><pre><code>- 内存：至少2GB- 磁盘：高级SSD- JDK：8- 数据库：mysql5.6/mysql5.7</code></pre><p>安装配置步骤：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#安装数据库</span></span><br><span class="line">useradd mysql</span><br><span class="line">wget https://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-5.7.22-linux-glibc2.12-x86_64.tar.gz</span><br><span class="line">tar -zxvf mysql-5.7.22-linux-glibc2.12-x86_64.tar.gz</span><br><span class="line">mv mysql-5.7.22-linux-glibc2.12-x86_64 /usr/<span class="built_in">local</span>/mysql</span><br><span class="line">chown -R mysql.mysql /usr/<span class="built_in">local</span>/mysql</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#初始化数据库</span></span><br><span class="line">/usr/<span class="built_in">local</span>/mysql/bin/mysqld --user=mysql --basedir=/usr/<span class="built_in">local</span>/mysql/ --datadir=/data/mysql_data --initialize</span><br><span class="line">cp /usr/<span class="built_in">local</span>/mysql/support-files/mysql.server /etc/init.d/mysqld</span><br><span class="line">chkconfig mysqld on</span><br><span class="line">ln -s /usr/<span class="built_in">local</span>/mysql/bin/mysql /usr/bin/</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#创建数据库及用户</span></span><br><span class="line">create database sonar;</span><br><span class="line">alter privileges all on sonar.* to <span class="string">'sonar'</span>@<span class="string">'localhost'</span> identified by <span class="string">'Sonarqube'</span>;</span><br><span class="line">flush privileges;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#同步时区</span></span><br><span class="line">cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#安装sonarqube</span></span><br><span class="line">useradd sonarqube</span><br><span class="line">wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-6.7.6.zip</span><br><span class="line">unzip sonarqube-6.7.6.zip</span><br><span class="line">mv /usr/<span class="built_in">local</span>/src/sonarqube-6.7.6 /opt/</span><br><span class="line">chown -R sonarqube.sonarqube /opt/sonarqube-6.7.6/</span><br><span class="line">su sonarqube -c <span class="string">"/opt/sonarqube-6.7.6/bin/linux-x86-64/sonar.sh start"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#安装scanner</span></span><br><span class="line">wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.2.0.1227-linux.zip</span><br><span class="line">unzip sonar-scanner-cli-3.2.0.1227-linux.zip</span><br><span class="line">mv /usr/<span class="built_in">local</span>/sonar-scanner-3.2.0.1227-linux/ /usr/<span class="built_in">local</span>/sonar-scanner</span><br><span class="line"><span class="comment">#配置环境变量</span></span><br><span class="line"><span class="built_in">export</span> PATH=/usr/<span class="built_in">local</span>/sonar-scanner/bin:<span class="variable">$PATH</span></span><br></pre></td></tr></table></figure><p>配置文件</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#sonarqube服务器配置</span></span><br><span class="line">[root@sonarqube opt]<span class="comment"># cat /opt/sonarqube-6.7.6/conf/sonar.properties | grep -v "#" | grep -v "^$"</span></span><br><span class="line">sonar.jdbc.username=sonar</span><br><span class="line">sonar.jdbc.password=xxxxxxx</span><br><span class="line">sonar.jdbc.url=jdbc:mysql://localhost:3306/sonar?useUnicode=<span class="literal">true</span>&amp;characterEncoding=utf8&amp;rewriteBatchedStatements=<span class="literal">true</span>&amp;useConfigs=maxPerformance&amp;useSSL=<span class="literal">false</span></span><br><span class="line">sonar.jdbc.maxActive=60</span><br><span class="line">sonar.jdbc.maxIdle=5</span><br><span class="line">sonar.jdbc.minIdle=2</span><br><span class="line">sonar.jdbc.maxWait=5000</span><br><span class="line">sonar.jdbc.minEvictableIdleTimeMillis=600000</span><br><span class="line">sonar.jdbc.timeBetweenEvictionRunsMillis=30000</span><br><span class="line">sonar.web.javaOpts=-Xmx3072m -Xms3072m -XX:+HeapDumpOnOutOfMemoryError</span><br><span class="line">sonar.web.host=0.0.0.0</span><br><span class="line">sonar.web.port=9000</span><br><span class="line"><span class="comment">#jenkins scanner的配置</span></span><br><span class="line">root@jenkins:/usr/<span class="built_in">local</span>/sonar-scanner/conf<span class="comment"># cat sonar-scanner.properties | grep -v "^$" | grep -v "#"</span></span><br><span class="line">sonar.host.url=http://sonar地址:9000</span><br></pre></td></tr></table></figure><p>jenkins集成</p><h3 id="1-sonarqube服务启动后，打开页面，获取token"><a href="#1-sonarqube服务启动后，打开页面，获取token" class="headerlink" title="1 sonarqube服务启动后，打开页面，获取token"></a>1 sonarqube服务启动后，打开页面，获取token</h3><p><img src="http://psx7iyg2c.bkt.clouddn.com/1.png" alt="1"></p><h3 id="2-在“系统管理”–“系统设置”找到SonarQube-servers，配置地址，在“Server-authentication-token”配置token，然后保存"><a href="#2-在“系统管理”–“系统设置”找到SonarQube-servers，配置地址，在“Server-authentication-token”配置token，然后保存" class="headerlink" title="2 在“系统管理”–“系统设置”找到SonarQube servers，配置地址，在“Server authentication token”配置token，然后保存"></a>2 在“系统管理”–“系统设置”找到SonarQube servers，配置地址，在“Server authentication token”配置token，然后保存</h3><p><img src="http://psx7iyg2c.bkt.clouddn.com/2.png" alt="2"></p><h3 id="3-在“系统管理”–“全局工具配置”–“SonarQube-Scanner”"><a href="#3-在“系统管理”–“全局工具配置”–“SonarQube-Scanner”" class="headerlink" title="3 在“系统管理”–“全局工具配置”–“SonarQube Scanner”"></a>3 在“系统管理”–“全局工具配置”–“SonarQube Scanner”</h3><p><img src="http://psx7iyg2c.bkt.clouddn.com/3.png" alt="3"></p><h3 id="4-对应项目构建的配置中，配置如下："><a href="#4-对应项目构建的配置中，配置如下：" class="headerlink" title="4 对应项目构建的配置中，配置如下："></a>4 对应项目构建的配置中，配置如下：</h3><p><img src="http://psx7iyg2c.bkt.clouddn.com/4.png" alt="4"></p><h3 id="5-构建成功后会在当前构建项目页面生成报告"><a href="#5-构建成功后会在当前构建项目页面生成报告" class="headerlink" title="5 构建成功后会在当前构建项目页面生成报告"></a>5 构建成功后会在当前构建项目页面生成报告</h3><p><img src="http://psx7iyg2c.bkt.clouddn.com/5.png" alt="5"></p><h3 id="6单击进入可查看代码分析报告"><a href="#6单击进入可查看代码分析报告" class="headerlink" title="6单击进入可查看代码分析报告"></a>6单击进入可查看代码分析报告</h3><p><img src="http://psx7iyg2c.bkt.clouddn.com/6.png" alt="6"><img src="http://psx7iyg2c.bkt.clouddn.com/7.png" alt="7"></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;SonarQube 是一个开源的代码质量分析平台，便于管理代码的质量，可检查出项目代码的漏洞和潜在的逻辑问题。&lt;/p&gt;
+&lt;p&gt;同时，它提供了丰富的插件，支持多种语言的检测， 如 Java、Python、Groovy、C、C++等几十种编程语言的检测。&lt;/p&gt;
+&lt;p&gt;它主要的
+      
+    
+    </summary>
+    
+    
+      <category term="工具" scheme="http://yoursite.com/tags/%E5%B7%A5%E5%85%B7/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Atom工具编辑markdown文件</title>
+    <link href="http://yoursite.com/2019/06/10/Atom%E5%B7%A5%E5%85%B7%E7%BC%96%E8%BE%91markdown%E6%96%87%E4%BB%B6/"/>
+    <id>http://yoursite.com/2019/06/10/Atom工具编辑markdown文件/</id>
+    <published>2019-06-10T06:26:46.000Z</published>
+    <updated>2019-06-10T06:41:48.676Z</updated>
+    
+    <content type="html"><![CDATA[<hr><p>Atom是由GitHub开发的自由及开放源代码的文字与代码编辑器，支持macOS、Windows和Linux操作系统，支持Node.js所写的插件，并内置由Github提供的Git版本控制系统。多数的延伸包皆为开放源代码授权，并由社群建置与维护</p><ul><li>[项目地址]（<a href="https://github.com/atom/atom）" target="_blank" rel="noopener">https://github.com/atom/atom）</a></li></ul><h3 id="1-常用快捷键"><a href="#1-常用快捷键" class="headerlink" title="1 常用快捷键"></a>1 常用快捷键</h3><blockquote><p>Crtl+Shift+M    开启Markdown实时预览<br>Command+Shift+P    打开命令窗口，可以运行各种菜单功能<br>Command + T    快速多文件切换<br>Command + F    文件内查找和替换<br>Command + Shift + F    多文件查找和替换<br>Command + [    对选中内容向左缩进<br>Command + ]    对选中内容向右缩进<br>Command + \    显示或隐藏目录树<br>Crtl + m    相应括号之间，html tag之间等跳转<br>Crtl + Alt + B    格式化代码（需要安装atom-beautify）<br>Crtl + `    调起CLI命令行界面（需要安装terminal-panel）</p></blockquote><h3 id="2-常用插件"><a href="#2-常用插件" class="headerlink" title="2 常用插件"></a>2 常用插件</h3><blockquote><p>增强预览(markdown-preview-plus)<br>同步滚动(markdown-scroll-sync)<br>代码增强(language-markdown)<br>图片粘贴(markdown-image-paste)<br>表格编辑(markdown-table-editor)<br>pdf导出(markdown-themeable-pdf、pdf-view)</p></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;hr&gt;
+&lt;p&gt;Atom是由GitHub开发的自由及开放源代码的文字与代码编辑器，支持macOS、Windows和Linux操作系统，支持Node.js所写的插件，并内置由Github提供的Git版本控制系统。多数的延伸包皆为开放源代码授权，并由社群建置与维护&lt;/p&gt;
+&lt;ul&gt;
+
+      
+    
+    </summary>
+    
+    
+      <category term="工具使用" scheme="http://yoursite.com/tags/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>第一篇文章</title>
+    <link href="http://yoursite.com/2019/06/06/my-fist-blog/"/>
+    <id>http://yoursite.com/2019/06/06/my-fist-blog/</id>
+    <published>2019-06-06T02:33:11.000Z</published>
+    <updated>2019-06-06T07:07:57.853Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="无题"><a href="#无题" class="headerlink" title="无题"></a>无题</h1><hr><p>我想随便写点什么，但是又不知道该从何写起，明天就是端午节了，祝福端午节快乐吧</p><p> <img src="https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1559804307&di=55985e5dc134ffec00ed832608819c22&src=http://pic.qiantucdn.com/58pic/11/28/97/94N58PICd4a.jpg" alt="one picture"></p><h2 id="我的初衷："><a href="#我的初衷：" class="headerlink" title="我的初衷："></a>我的初衷：</h2><blockquote><ul><li>整理知识，学习笔记</li><li>发布日记杂文，所见所想</li><li>偶尔回头看看自己的东西，也是好的</li></ul></blockquote><h3 id="年轻人，不要懒，多看多想多实践"><a href="#年轻人，不要懒，多看多想多实践" class="headerlink" title="年轻人，不要懒，多看多想多实践"></a>年轻人，不要懒，多看多想多实践</h3>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;无题&quot;&gt;&lt;a href=&quot;#无题&quot; class=&quot;headerlink&quot; title=&quot;无题&quot;&gt;&lt;/a&gt;无题&lt;/h1&gt;&lt;hr&gt;
+&lt;p&gt;我想随便写点什么，但是又不知道该从何写起，明天就是端午节了，祝福端午节快乐吧&lt;/p&gt;
+&lt;p&gt; &lt;img src=&quot;https://
+      
+    
+    </summary>
+    
+    
+      <category term="随记" scheme="http://yoursite.com/tags/%E9%9A%8F%E8%AE%B0/"/>
+    
+  </entry>
+  
+</feed>
